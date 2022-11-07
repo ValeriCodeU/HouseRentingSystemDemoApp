@@ -1,6 +1,9 @@
-﻿using HouseRentingSystem.Core.Models.Agents;
+﻿using HouseRentingSystem.Core.Contracts;
+using HouseRentingSystem.Core.Models.Agents;
+using HouseRentingSystem.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace HouseRentingSystem.Controllers
 {
@@ -8,9 +11,25 @@ namespace HouseRentingSystem.Controllers
 
 	public class AgentsController : Controller
 	{
-		public IActionResult Become()
+		private readonly IAgentService agentService;
+
+		public AgentsController(IAgentService _agentService)
 		{
-			return View();
+			agentService = _agentService;
+		}
+
+		public async Task<IActionResult> Become()
+		{
+			var userId = ClaimsPrincipalExtensions.Id;
+
+            if (await agentService.IsExistsById(this.User.Id()))
+			{
+				return BadRequest();
+			}
+
+			var model = new BecomeAgentFormModel();
+
+			return View(model);
 		}
 
 		[HttpPost]
