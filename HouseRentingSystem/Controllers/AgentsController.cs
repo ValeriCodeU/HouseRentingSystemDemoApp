@@ -22,7 +22,7 @@ namespace HouseRentingSystem.Controllers
 		{
 			var userId = ClaimsPrincipalExtensions.Id;
 
-            if (await agentService.IsExistsById(this.User.Id()))
+            if (await agentService.IsExistsByIdAsync(this.User.Id()))
 			{
 				return BadRequest();
 			}

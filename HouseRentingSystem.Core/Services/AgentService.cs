@@ -18,9 +18,14 @@ namespace HouseRentingSystem.Core.Services
             dbContext = _dbContext;
         }
 
-        public async Task<bool> IsExistsById(string userId)
+        public async Task<bool> IsExistsByIdAsync(string userId)
         {
             return await dbContext.Agents.AnyAsync(a => a.UserId == userId);
+        }
+
+        public async Task<bool> UserWithThisPhoneNumberExistsAsync(string phoneNumber)
+        {
+            return await dbContext.Agents.AnyAsync(a => a.PhoneNumber == phoneNumber);
         }
     }
 }
