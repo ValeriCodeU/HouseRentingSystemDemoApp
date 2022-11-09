@@ -18,9 +18,26 @@ namespace HouseRentingSystem.Core.Services
             dbContext = _dbContext;
         }
 
+        public async Task Create(string userId, string phoneNumber)
+        {
+            var agent = new Agent()
+            {
+                UserId = userId,
+                PhoneNumber = phoneNumber
+            };
+
+            await dbContext.Agents.AddAsync(agent);
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task<bool> IsExistsByIdAsync(string userId)
         {
             return await dbContext.Agents.AnyAsync(a => a.UserId == userId);
+        }
+
+        public Task<bool> UserHasRents(string userId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> UserWithThisPhoneNumberExistsAsync(string phoneNumber)
