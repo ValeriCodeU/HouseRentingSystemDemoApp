@@ -3,7 +3,6 @@ using HouseRentingSystem.Core.Models.Agents;
 using HouseRentingSystem.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace HouseRentingSystem.Controllers
 {
@@ -36,8 +35,31 @@ namespace HouseRentingSystem.Controllers
 
 		public async Task<IActionResult> Become (BecomeAgentFormModel model)
 		{
-			//return RedirectToAction(nameof(HousesController.All));
-			return RedirectToAction("All", "House");
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+            var userId = this.User.Id();
+
+			if (await agentService.IsExistsByIdAsync(userId))
+            {
+                return BadRequest();
+            }
+
+			if (await agentService.UserWithThisPhoneNumberExistsAsync(model.PhoneNumber))
+			{
+				ModelState.AddModelError(nameof(model.PhoneNumber), "Phone number already exists. Enter another one.");
+			}
+
+			if (await agentService.UserHasRentsAsync(userId))
+			{
+				ModelState.AddModelError("Error", "You should have no rents to become and agent!");
+			}
+
+			await agentService.CreateAsync(userId, model.PhoneNumber);
+
+            //return RedirectToAction(nameof(HousesController.All));
+            return RedirectToAction("All", "Houses");
 
 		}
 	}
