@@ -18,8 +18,8 @@ namespace HouseRentingSystem.Controllers
 		}
 
 		public async Task<IActionResult> Become()
-		{
-			var userId = ClaimsPrincipalExtensions.Id;
+		{           
+            var userId = ClaimsPrincipalExtensions.Id;
 
             if (await agentService.IsExistsByIdAsync(this.User.Id()))
 			{
@@ -58,9 +58,7 @@ namespace HouseRentingSystem.Controllers
 
 			await agentService.CreateAsync(userId, model.PhoneNumber);
 
-            //return RedirectToAction(nameof(HousesController.All));
             return RedirectToAction("All", "Houses");
-
 		}
 	}
 }
