@@ -34,6 +34,9 @@ namespace HouseRentingSystem.Infrastructure.Data
 
             public const int PrecisionDecimal = 18;
             public const int ScaleDecimal = 2;
+
+            public const string MaxPricePerMonth = "2000";
+            public const string MinPricePerMonth = "0.0";
         }
     }
 }

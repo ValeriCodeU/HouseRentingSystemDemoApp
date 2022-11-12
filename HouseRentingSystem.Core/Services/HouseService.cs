@@ -2,26 +2,57 @@
 using HouseRentingSystem.Core.Models.Houses;
 using HouseRentingSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HouseRentingSystem.Core.Services
 {
     public class HouseService : IHouseService
     {
-        private readonly HouseRentingDbContext context;
+        private readonly HouseRentingDbContext dbContext;
 
-        public HouseService(HouseRentingDbContext _context)
+        public HouseService(HouseRentingDbContext _dbContext)
         {
-            context = _context;
+            dbContext = _dbContext;
         }
 
-        public async Task<IEnumerable<HouseIndexServiceModel>> LastThreeHouses()
+        public async Task<IEnumerable<HouseCategoryModel>> AllCategoriesAsync()
         {
-            var model = await context.Houses
+            return await dbContext.Categories
+                .OrderBy(c => c.Name)
+                .Select(c => new HouseCategoryModel()                
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                })
+                .ToListAsync();
+        }
+
+        public async Task<bool> CategoryExists(int categoryId)
+        {
+            return await dbContext.Categories.AnyAsync(c => c.Id == categoryId);
+        }
+
+        public async Task<int> CreateAsync(HouseFormModel model, int agentId)
+        {
+            var house = new House()
+            {
+                Title = model.Title,
+                Address = model.Address,
+                Description = model.Description,
+                ImageUrl = model.ImageUrl,
+                PricePerMonth = model.PricePerMonth,
+                CategoryId = model.CategoryId,
+                AgentId = agentId                
+            };
+
+            await dbContext.Houses.AddAsync(house);
+            await dbContext.SaveChangesAsync();
+
+            return house.Id;
+        }
+
+        public async Task<IEnumerable<HouseIndexServiceModel>> LastThreeHousesAsync()
+        {
+            var model = await dbContext.Houses
                 .OrderByDescending(h => h.Id)
                 .Select(h => new HouseIndexServiceModel()                
                 {

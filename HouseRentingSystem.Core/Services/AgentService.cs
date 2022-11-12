@@ -30,6 +30,13 @@ namespace HouseRentingSystem.Core.Services
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task<int> GetAgentIdAsync(string userId)
+        {
+            var agentId = (await dbContext.Agents.FirstOrDefaultAsync(a => a.UserId == userId))?.Id ?? 0;
+
+            return agentId;
+        }
+
         public async Task<bool> IsExistsByIdAsync(string userId)
         {
             return await dbContext.Agents.AnyAsync(a => a.UserId == userId);
