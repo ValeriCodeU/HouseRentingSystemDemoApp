@@ -1,6 +1,7 @@
 ﻿using HouseRentingSystem.Core.Contracts;
 using HouseRentingSystem.Core.Models.Houses;
 using HouseRentingSystem.Infrastructure.Data;
+using HouseRentingSystem.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace HouseRentingSystem.Core.Services
@@ -14,6 +15,11 @@ namespace HouseRentingSystem.Core.Services
             dbContext = _dbContext;
         }
 
+        public async Task<HouseQueryServiceModel> AllAsync(string category = null, string searchTerm = null, HouseSorting sorting = HouseSorting.Newest, int currentPage = 1, int housesPerPage = 1)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<HouseCategoryModel>> AllCategoriesAsync()
         {
             return await dbContext.Categories
@@ -24,6 +30,11 @@ namespace HouseRentingSystem.Core.Services
                     Name = c.Name,
                 })
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> AllGategoriesNamesAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> CategoryExists(int categoryId)

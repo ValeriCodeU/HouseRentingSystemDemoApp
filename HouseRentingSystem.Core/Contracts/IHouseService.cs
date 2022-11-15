@@ -1,13 +1,9 @@
 ﻿using HouseRentingSystem.Core.Models.Houses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using HouseRentingSystem.Infrastructure.Data.Enums;
 
 namespace HouseRentingSystem.Core.Contracts
 {
-	public interface IHouseService
+    public interface IHouseService
 	{
         Task<IEnumerable<HouseIndexServiceModel>> LastThreeHousesAsync();
 
@@ -16,5 +12,14 @@ namespace HouseRentingSystem.Core.Contracts
         Task<bool> CategoryExists(int categoryId);
 
         Task<int> CreateAsync(HouseFormModel model, int agentId);
+
+        Task<HouseQueryServiceModel> AllAsync(
+            string category = null, 
+            string searchTerm = null, 
+            HouseSorting sorting = HouseSorting.Newest,
+            int currentPage = 1,
+            int housesPerPage = 1);
+
+        Task<IEnumerable<string>> AllGategoriesNamesAsync();
     }
 }
