@@ -1,5 +1,5 @@
 ﻿using HouseRentingSystem.Core.Models.Houses;
-using HouseRentingSystem.Infrastructure.Data.Enums;
+using HouseRentingSystem.Core.Models.Houses.Enums;
 
 namespace HouseRentingSystem.Core.Contracts
 {
@@ -14,8 +14,8 @@ namespace HouseRentingSystem.Core.Contracts
         Task<int> CreateAsync(HouseFormModel model, int agentId);
 
         Task<HouseQueryServiceModel> AllAsync(
-            string category = null, 
-            string searchTerm = null, 
+            string? category = null, 
+            string? searchTerm = null,          
             HouseSorting sorting = HouseSorting.Newest,
             int currentPage = 1,
             int housesPerPage = 1);
