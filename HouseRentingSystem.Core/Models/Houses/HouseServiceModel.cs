@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace HouseRentingSystem.Core.Models.Houses
 {
-	public class HouseServiceModel
+    public class HouseServiceModel
 	{
 		public int Id { get; set; }
 

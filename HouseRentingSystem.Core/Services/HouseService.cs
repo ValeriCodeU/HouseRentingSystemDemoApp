@@ -3,7 +3,6 @@ using HouseRentingSystem.Core.Models.Houses;
 using HouseRentingSystem.Core.Models.Houses.Enums;
 using HouseRentingSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HouseRentingSystem.Core.Services
 {
@@ -28,14 +27,14 @@ namespace HouseRentingSystem.Core.Services
 
             if (!String.IsNullOrEmpty(category))
             {
-                housesQuery.Where(c => c.Category.Name == category);
+                housesQuery = dbContext.Houses.Where(c => c.Category.Name == category);
             }
 
             if (!String.IsNullOrEmpty(searchTerm))
             {
                 searchTerm = $"%{searchTerm.ToLower()}%";
 
-                housesQuery.Where(
+                housesQuery = housesQuery.Where(
                     h => EF.Functions.Like(h.Title.ToLower(), searchTerm) ||
                 EF.Functions.Like(h.Address.ToLower(), searchTerm) ||
                 EF.Functions.Like(h.Description.ToLower(), searchTerm));
@@ -60,7 +59,7 @@ namespace HouseRentingSystem.Core.Services
                     PricePerMonth = h.PricePerMonth
                 }).ToListAsync();
 
-            var totalHouses = housesQuery.Count();
+            var totalHouses = await housesQuery.CountAsync();
 
             return new HouseQueryServiceModel()
             {

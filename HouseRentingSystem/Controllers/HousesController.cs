@@ -23,7 +23,7 @@ namespace HouseRentingSystem.Controllers
 
         [AllowAnonymous]
 
-		public async Task<IActionResult> All([FromQuery]AllHousesQueryModel query)
+		public async Task<IActionResult> All([FromQuery] AllHousesQueryModel query)
 		{
 			var resultQuery = await houseService.AllAsync(
 				query.Category,
