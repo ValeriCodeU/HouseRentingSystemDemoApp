@@ -83,7 +83,9 @@ namespace HouseRentingSystem.Core.Services
 
         public async Task<IEnumerable<string>> AllGategoriesNamesAsync()
         {
-            throw new NotImplementedException();
+            var categoryNames = await dbContext.Categories.Select(c => c.Name).Distinct().ToListAsync();
+
+            return categoryNames;
         }
 
         public async Task<bool> CategoryExists(int categoryId)
