@@ -87,37 +87,14 @@ namespace HouseRentingSystem.Core.Services
             return categoryNames;
         }
 
-        public async Task<IEnumerable<HouseServiceModel>> AllHousesByAgentIdAsync(int agentId)
+        public Task<IEnumerable<HouseServiceModel>> AllHousesByAgentIdAsync(int agentId)
         {
-            return await dbContext.Houses
-                .Where(h => h.AgentId == agentId)
-                .Select(h => new HouseServiceModel()
-                {
-                    Id =h.Id,
-                    Title = h.Title,
-                    Address = h.Address,
-                    ImageUrl = h.ImageUrl,
-                    PricePerMonth = h.PricePerMonth,
-                    IsRented = h.RenterId != null
-
-                })
-                .ToListAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<HouseServiceModel>> AllHousesByUserIdAsync(string userId)
+        public Task<IEnumerable<HouseServiceModel>> AllHousesByUserIdAsync(string userId)
         {
-            return await dbContext.Houses
-                .Where(h => h.RenterId == userId)
-                .Select(h => new HouseServiceModel()
-                {
-                    Id = h.Id,
-                    Title = h.Title,
-                    Address = h.Address,
-                    ImageUrl = h.ImageUrl,
-                    PricePerMonth = h.PricePerMonth,
-                    IsRented = h.RenterId != null
-                })
-                .ToListAsync();
+            throw new NotImplementedException();
         }
 
         public async Task<bool> CategoryExists(int categoryId)
