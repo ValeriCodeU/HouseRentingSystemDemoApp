@@ -60,10 +60,14 @@ namespace HouseRentingSystem.Controllers
             return View(myHouses);
         }
 
-		public IActionResult Details(int id)
+		public async Task<IActionResult> Details(int id)
 		{
-			var model = new HouseDetailsViewModel();
+			if (!await houseService.HouseExistsAsync(id))
+			{
+				return RedirectToAction(nameof(All));
+			}
 
+			var model = await houseService.HouseDetailsByIdAsync(id);
 
             return View(model);
 		}
