@@ -87,16 +87,6 @@ namespace HouseRentingSystem.Core.Services
             return categoryNames;
         }
 
-        public Task<IEnumerable<HouseServiceModel>> AllHousesByAgentIdAsync(int agentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<HouseServiceModel>> AllHousesByUserIdAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> CategoryExists(int categoryId)
         {
             return await dbContext.Categories.AnyAsync(c => c.Id == categoryId);
