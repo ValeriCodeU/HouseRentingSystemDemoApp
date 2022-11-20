@@ -145,6 +145,44 @@ namespace HouseRentingSystem.Core.Services
             return house.Id;
         }
 
+        public async Task EditHouseAsync(int houseId, HouseFormModel model)
+        {
+            var house = await dbContext.Houses.FindAsync(houseId);
+
+            house.Title = model.Title;
+            house.Address = model.Address;
+            house.Description = model.Description;
+            house.ImageUrl = model.ImageUrl;
+            house.PricePerMonth = model.PricePerMonth;
+            house.CategoryId = model.CategoryId;
+
+            await dbContext.Houses.AddAsync(house);
+        }
+
+        public async Task<int> GetHouseCategoryIdAsync(int houseId)
+        {
+            return (await dbContext.Houses.FindAsync(houseId)).CategoryId;
+        }
+
+        public async Task<bool> HasAgentWithIdAsync(int houseId, string currentUserId)
+        {
+            var house = await dbContext.Houses.FindAsync(houseId);
+
+            var agent = await dbContext.Agents.FirstOrDefaultAsync(a => a.Id == house.AgentId);
+
+            if (agent == null)
+            {
+                return false;
+            }
+
+            if (agent.UserId != currentUserId)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task<HouseDetailsViewModel> HouseDetailsByIdAsync(int id)
         {
             return await dbContext.Houses
