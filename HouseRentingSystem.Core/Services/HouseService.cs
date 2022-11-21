@@ -156,7 +156,7 @@ namespace HouseRentingSystem.Core.Services
             house.PricePerMonth = model.PricePerMonth;
             house.CategoryId = model.CategoryId;
 
-            await dbContext.Houses.AddAsync(house);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task<int> GetHouseCategoryIdAsync(int houseId)
