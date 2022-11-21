@@ -222,6 +222,28 @@ namespace HouseRentingSystem.Core.Services
             return await dbContext.Houses.AnyAsync(h => h.Id == id && h.IsActive);
         }
 
+        public async Task<bool> IsRentedAsync(int id)
+        {
+            return (await dbContext.Houses.FindAsync(id)).RenterId != null;
+        }
+
+        public async Task<bool> IsRentedByUserWithIdAsync(int houseId, string userId)
+        {
+            var house = await dbContext.Houses.FindAsync(houseId);            
+
+            if (house == null)
+            {
+                return false;
+            }
+
+            if (house.RenterId != userId)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task<IEnumerable<HouseIndexServiceModel>> LastThreeHousesAsync()
         {
             var model = await dbContext.Houses
@@ -237,6 +259,15 @@ namespace HouseRentingSystem.Core.Services
                 .ToListAsync();
 
             return model;
+        }
+
+        public async Task RentAsync(int houseId, string userId)
+        {
+            var house = await dbContext.Houses.FindAsync(houseId);
+
+            house.RenterId = userId;
+
+            await dbContext.SaveChangesAsync();
         }
     }
 }

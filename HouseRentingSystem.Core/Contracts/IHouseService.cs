@@ -1,5 +1,6 @@
 ﻿using HouseRentingSystem.Core.Models.Houses;
 using HouseRentingSystem.Core.Models.Houses.Enums;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace HouseRentingSystem.Core.Contracts
 {
@@ -37,5 +38,11 @@ namespace HouseRentingSystem.Core.Contracts
         Task<int> GetHouseCategoryIdAsync(int houseId);
 
         Task DeleteAsync(int houseId);
+
+        Task<bool> IsRentedAsync(int id);
+
+        Task<bool> IsRentedByUserWithIdAsync(int houseId, string userId);
+
+        Task RentAsync(int houseId, string userId);
     }
 }
