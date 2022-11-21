@@ -178,11 +178,48 @@ namespace HouseRentingSystem.Controllers
             return RedirectToAction(nameof(Details), new { id });
 		}
 
+		public async Task<IActionResult> Delete(int id)
+		{
+            if (!await houseService.HouseExistsAsync(id))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            if (!await houseService.HasAgentWithIdAsync(id, this.User.Id()))
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+
+            var house = await houseService.HouseDetailsByIdAsync(id);
+
+			var model = new HouseDeleteViewModel()
+			{
+
+				Title = house.Title,
+				Address = house.Address,
+				ImageUrl = house.ImageUrl
+			};
+
+			return View(model);
+        }
+
         [HttpPost]
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(HouseDeleteViewModel model)
         {
-            return RedirectToAction(nameof(All));
+            if (!await houseService.HouseExistsAsync(model.Id))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            if (!await houseService.HasAgentWithIdAsync(model.Id, this.User.Id()))
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+
+			await houseService.DeleteAsync(model.Id);
+
+			return RedirectToAction(nameof(All));
         }
 
         [HttpPost]

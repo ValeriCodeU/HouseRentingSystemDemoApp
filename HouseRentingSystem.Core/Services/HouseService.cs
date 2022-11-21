@@ -147,9 +147,12 @@ namespace HouseRentingSystem.Core.Services
             return house.Id;
         }
 
-        public Task Delete(int houseId)
+        public async Task DeleteAsync(int houseId)
         {
-            throw new NotImplementedException();
+            var house = await dbContext.Houses.FindAsync(houseId);
+            house.IsActive = false;
+
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task EditHouseAsync(int houseId, HouseFormModel model)
@@ -193,6 +196,7 @@ namespace HouseRentingSystem.Core.Services
         public async Task<HouseDetailsViewModel> HouseDetailsByIdAsync(int id)
         {
             return await dbContext.Houses
+                .Where(h => h.IsActive)
                 .Where(h => h.Id == id)
                 .Select(h => new HouseDetailsViewModel()
                 {
@@ -215,12 +219,13 @@ namespace HouseRentingSystem.Core.Services
 
         public async Task<bool> HouseExistsAsync(int id)
         {
-            return await dbContext.Houses.AnyAsync(h => h.Id == id);
+            return await dbContext.Houses.AnyAsync(h => h.Id == id && h.IsActive);
         }
 
         public async Task<IEnumerable<HouseIndexServiceModel>> LastThreeHousesAsync()
         {
             var model = await dbContext.Houses
+                .Where(h => h.IsActive)
                 .OrderByDescending(h => h.Id)
                 .Select(h => new HouseIndexServiceModel()
                 {

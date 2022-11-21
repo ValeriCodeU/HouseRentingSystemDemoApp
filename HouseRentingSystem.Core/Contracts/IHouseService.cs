@@ -36,6 +36,6 @@ namespace HouseRentingSystem.Core.Contracts
 
         Task<int> GetHouseCategoryIdAsync(int houseId);
 
-        Task Delete(int houseId);
+        Task DeleteAsync(int houseId);
     }
 }
