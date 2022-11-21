@@ -23,7 +23,7 @@ namespace HouseRentingSystem.Core.Services
             int housesPerPage = 1)
 
         {
-            var housesQuery = dbContext.Houses.AsQueryable();
+            var housesQuery = dbContext.Houses.Where(h => h.IsActive).AsQueryable();
 
             if (!String.IsNullOrEmpty(category))
             {
@@ -91,6 +91,7 @@ namespace HouseRentingSystem.Core.Services
         {
             return await dbContext
                 .Houses
+                .Where(h => h.IsActive)
                 .Where(h => h.AgentId == agentId)
                 .Select(h => new HouseServiceModel()
                 {
@@ -108,6 +109,7 @@ namespace HouseRentingSystem.Core.Services
         {
             return await dbContext
                 .Houses
+                .Where(h => h.IsActive)
                 .Where(h => h.RenterId == userId)
                 .Select(h => new HouseServiceModel()
                 {
@@ -143,6 +145,11 @@ namespace HouseRentingSystem.Core.Services
             await dbContext.SaveChangesAsync();
 
             return house.Id;
+        }
+
+        public Task Delete(int houseId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task EditHouseAsync(int houseId, HouseFormModel model)
