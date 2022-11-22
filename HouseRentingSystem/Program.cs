@@ -1,4 +1,5 @@
 using HouseRentingSystem.Core.Contracts;
+using HouseRentingSystem.Core.Exceptions;
 using HouseRentingSystem.Core.Services;
 using HouseRentingSystem.Infrastructure.Data;
 using HouseRentingSystem.ModelBinders;
@@ -30,6 +31,7 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddScoped<IHouseService, HouseService>();
 builder.Services.AddScoped<IAgentService, AgentService>();
+builder.Services.AddScoped<IGuard, Guard>();
 
 var app = builder.Build();
 

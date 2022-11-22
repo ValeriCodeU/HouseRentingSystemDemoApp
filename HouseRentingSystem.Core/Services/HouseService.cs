@@ -1,4 +1,5 @@
 ﻿using HouseRentingSystem.Core.Contracts;
+using HouseRentingSystem.Core.Exceptions;
 using HouseRentingSystem.Core.Models.Houses;
 using HouseRentingSystem.Core.Models.Houses.Enums;
 using HouseRentingSystem.Infrastructure.Data;
@@ -10,8 +11,13 @@ namespace HouseRentingSystem.Core.Services
     {
         private readonly HouseRentingDbContext dbContext;
 
-        public HouseService(HouseRentingDbContext _dbContext)
+        private readonly IGuard guard;
+
+        public HouseService(
+            HouseRentingDbContext _dbContext,
+            IGuard _guard)
         {
+            guard = _guard;
             dbContext = _dbContext;
         }
 
@@ -266,6 +272,13 @@ namespace HouseRentingSystem.Core.Services
             var house = await dbContext.Houses.FindAsync(houseId);
 
             house.RenterId = userId;
+
+            if (house != null && house.RenterId != null)
+            {
+                throw new ArgumentException("House is already rented");
+            }
+
+            guard.AgainstNull(house, "House can not be found");
 
             await dbContext.SaveChangesAsync();
         }

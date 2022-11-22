@@ -226,6 +226,24 @@ namespace HouseRentingSystem.Controllers
 
         public async Task<IActionResult> Rent(int id)
         {
+            if (!await houseService.HouseExistsAsync(id))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            if (await agentService.IsExistsByIdAsync(this.User.Id()))
+            {
+                //return BadRequest();
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+
+			if (await houseService.IsRentedAsync(id))
+			{
+                return RedirectToAction(nameof(All));
+            }
+
+			await houseService.RentAsync(id, this.User.Id());
+
             return RedirectToAction(nameof(Mine));
         }
 
