@@ -267,6 +267,16 @@ namespace HouseRentingSystem.Core.Services
             return model;
         }
 
+        public async Task LeaveAsync(int houseId)
+        {
+            var house = await dbContext.Houses.FindAsync(houseId);
+
+            guard.AgainstNull(houseId, "House can not be found");
+
+            house.RenterId = null;
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task RentAsync(int houseId, string userId)
         {
             var house = await dbContext.Houses.FindAsync(houseId);

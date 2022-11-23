@@ -251,6 +251,18 @@ namespace HouseRentingSystem.Controllers
 
         public async Task<IActionResult> Leave(int id)
         {
+            if (!await houseService.HouseExistsAsync(id) || !await houseService.IsRentedAsync(id))
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+			if (await houseService.IsRentedByUserWithIdAsync(id, this.User.Id()))
+			{
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+
+			await houseService.LeaveAsync(id);
+
             return RedirectToAction(nameof(Mine));
         }
     }

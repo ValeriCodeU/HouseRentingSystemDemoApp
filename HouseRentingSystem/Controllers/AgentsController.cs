@@ -19,12 +19,12 @@ namespace HouseRentingSystem.Controllers
 
 		public async Task<IActionResult> Become()
 		{           
-            var userId = ClaimsPrincipalExtensions.Id;
+            //var userId = ClaimsPrincipalExtensions.Id;
 
             if (await agentService.IsExistsByIdAsync(this.User.Id()))
 			{
-				return BadRequest();
-			}
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
 
 			var model = new BecomeAgentFormModel();
 
@@ -43,7 +43,7 @@ namespace HouseRentingSystem.Controllers
 
 			if (await agentService.IsExistsByIdAsync(userId))
             {
-                return BadRequest();
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
             }
 
 			if (await agentService.UserWithThisPhoneNumberExistsAsync(model.PhoneNumber))
