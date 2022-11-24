@@ -21,9 +21,9 @@ namespace HouseRentingSystem.Core.Services
 
         public async Task<StatisticsServiceModel> TotalAsync()
         {
-            var totalHouse = await dbContext.Houses.CountAsync();
+            var totalHouse = await dbContext.Houses.Where(h => h.IsActive).CountAsync();
 
-            var totalRents = await dbContext.Houses.Where(h => h.RenterId != null).CountAsync();
+            var totalRents = await dbContext.Houses.Where(h => h.RenterId != null && h.IsActive).CountAsync();
 
             return new StatisticsServiceModel()
             {
