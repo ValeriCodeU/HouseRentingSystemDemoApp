@@ -1,4 +1,5 @@
 ﻿using HouseRentingSystem.Core.Contracts;
+using HouseRentingSystem.Core.Extensions;
 using HouseRentingSystem.Core.Models.Houses;
 using HouseRentingSystem.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -60,14 +61,19 @@ namespace HouseRentingSystem.Controllers
             return View(myHouses);
         }
 
-		public async Task<IActionResult> Details(int id)
+		public async Task<IActionResult> Details(int id, string information)
 		{
 			if (!await houseService.HouseExistsAsync(id))
 			{
 				return RedirectToAction(nameof(All));
-			}
+			}			
 
 			var model = await houseService.HouseDetailsByIdAsync(id);
+
+            if (information != model.GetInformation())
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
 
             return View(model);
 		}
