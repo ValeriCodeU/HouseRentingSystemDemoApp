@@ -119,7 +119,7 @@ namespace HouseRentingSystem.Controllers
 
 			int id = await houseService.CreateAsync(model, agentId);
 
-            return RedirectToAction(nameof(Details), new { id });
+            return RedirectToAction(nameof(Details), new { id = id, information = model.GetInformation() });
         }
 
 		public async Task<IActionResult> Edit(int id)
@@ -181,7 +181,7 @@ namespace HouseRentingSystem.Controllers
 
 			await houseService.EditHouseAsync(id, model);
 
-            return RedirectToAction(nameof(Details), new { id });
+            return RedirectToAction(nameof(Details), new { id = id, information = model.GetInformation() });
 		}
 
 		public async Task<IActionResult> Delete(int id)
