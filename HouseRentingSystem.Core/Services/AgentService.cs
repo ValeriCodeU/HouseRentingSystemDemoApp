@@ -12,10 +12,10 @@ namespace HouseRentingSystem.Core.Services
     public class AgentService : IAgentService
     {
         private readonly HouseRentingDbContext dbContext;
-
+       
         public AgentService(HouseRentingDbContext _dbContext)
         {
-            dbContext = _dbContext;
+            dbContext = _dbContext;         
         }
 
         public async Task CreateAsync(string userId, string phoneNumber)
@@ -26,6 +26,7 @@ namespace HouseRentingSystem.Core.Services
                 PhoneNumber = phoneNumber
             };
 
+         
             await dbContext.Agents.AddAsync(agent);
             await dbContext.SaveChangesAsync();
         }
@@ -39,7 +40,7 @@ namespace HouseRentingSystem.Core.Services
 
         public async Task<bool> IsExistsByIdAsync(string userId)
         {
-            return await dbContext.Agents.AnyAsync(a => a.UserId == userId);
+            return await dbContext.Agents.AnyAsync(a => a.UserId == userId);            
         }
 
         public async Task<bool> UserHasRentsAsync(string userId)
