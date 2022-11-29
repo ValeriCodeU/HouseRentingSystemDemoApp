@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using HouseRentingSystem.Core.Contracts
+@using HouseRentingSystem.Extensions
+@inject IAgentService agents;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -27,9 +31,12 @@
 							<li class="nav-item">
 								<a class="nav-link text-dark" asp-area="" asp-controller="Houses" asp-action="Mine">My Houses</a>
 							</li>
-							<li class="nav-item">
+							@if (await this.agents.IsExistsByIdAsync(this.User.Id()))
+							{
+								<li class="nav-item">
 								<a class="nav-link text-dark" asp-area="" asp-controller="Houses" asp-action="Add">Add House</a>
 							</li>
+							}							
 							<li class="nav-item">
 								<a class="nav-link text-dark" asp-area="" asp-controller="Agents" asp-action="Become">Become Agent</a>
 							</li>
