@@ -23,6 +23,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.Password.RequireUppercase = false;
 
 })
+     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<HouseRentingDbContext>();
 builder.Services.AddControllersWithViews()
     .AddMvcOptions(options =>
